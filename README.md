@@ -20,6 +20,8 @@ O Service Desk Quiz é uma aplicação web simples onde os usuários podem respo
 - **CSS** para estilização.
 - **JavaScript** para lógica do quiz e manipulação de dados.
 - **Excel** como fonte de dados para as perguntas.
+- **Flask** para o backend da aplicação.
+- **pandas** para manipulação dos dados do Excel.
 
 ## Como Rodar o Projeto
 
@@ -34,11 +36,18 @@ O Service Desk Quiz é uma aplicação web simples onde os usuários podem respo
 
 3. **Configure o Arquivo de Perguntas:**
 
-    Certifique-se de que o arquivo base-perguntas.xlsx está no mesmo diretório que o seu script app.py.
+    Certifique-se de que o arquivo perguntas.xlsx está no mesmo diretório que o seu script app.py.
 
-4. **Abra o Arquivo HTML em um Navegador:**
+4. **Instale as Dependências:**
+    ```bash
+    pip install -r requirements.txt
+    
+5. **Execute o Servidor Flask:**
+    ```bash
+    python app.py
 
-    Você pode abrir o arquivo index.html diretamente no navegador para ver a aplicação em funcionamento.
+6. **Abra o servidor criado em um navegador web**
+    Exemplo: http://127.0.0.1:5000
 
 
 ## Contato
