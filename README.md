@@ -34,17 +34,17 @@ O Service Desk Quiz é uma aplicação web simples onde os usuários podem respo
 
 3. **Configure o Arquivo de Perguntas:**
 
-Certifique-se de que o arquivo base-perguntas.xlsx está no mesmo diretório que o seu script app.py.
+    Certifique-se de que o arquivo base-perguntas.xlsx está no mesmo diretório que o seu script app.py.
 
 4. **Abra o Arquivo HTML em um Navegador:**
 
-Você pode abrir o arquivo index.html diretamente no navegador para ver a aplicação em funcionamento.
+    Você pode abrir o arquivo index.html diretamente no navegador para ver a aplicação em funcionamento.
 
 
 ## Contato
 
 Para mais informações, entre em contato com:
 
-Nome: Guilherme Savio Ribas
-E-mail: guilherme.savio@gmail.com
-GitHub: GuilhermeSavioRibas
+* Nome: Guilherme Savio Ribas
+* E-mail: guilherme.savio@gmail.com
+* GitHub: GuilhermeSavioRibas
