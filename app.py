@@ -115,15 +115,14 @@ def use_l2():
 def use_card():
     if session['cartas'] > 0:
         session['cartas'] -= 1
-        cartas = ['K', '1', '2', '3']
+        cartas = ['0', '1', '2', '3']
         carta_escolhida = random.choice(cartas)
 
         opcoes = session.get('current_options')
         correct_answer = session.get('correct_answer')
         respostas_erradas = [opcao for opcao in opcoes if opcao != correct_answer]
 
-        if carta_escolhida == 'K':
-            # Não elimina nenhuma resposta
+        if carta_escolhida == '0':
             pass
         elif carta_escolhida == '1' and len(respostas_erradas) >= 1:
             respostas_erradas = respostas_erradas[:2]
@@ -137,8 +136,11 @@ def use_card():
 
         session['current_options'] = novas_opcoes
 
-        return jsonify({'success': True, 'carta': carta_escolhida, 'opcoes': novas_opcoes, 'cartas': session['cartas'], 'pergunta': session['current_question']})
+        carta_imagem = f"static/images/card{carta_escolhida}.png"
+
+        return jsonify({'success': True, 'carta': carta_escolhida, 'carta_imagem': carta_imagem, 'opcoes': novas_opcoes, 'cartas': session['cartas'], 'pergunta': session['current_question']})
     return jsonify({'success': False})
+
 
 @app.route('/use_article', methods=['POST'])
 def use_article():

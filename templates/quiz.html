@@ -6,6 +6,7 @@
     <title>Service Desk Quiz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container">
@@ -122,7 +123,13 @@
                     if (data.success) {
                         cartas--;
                         document.getElementById('cartas').innerText = cartas;
-                        alert(`Você usou a carta: ${data.carta}`);
+                        Swal.fire({
+                            title: `Respostas removidas: ${data.carta}`,
+                            imageUrl: data.carta_imagem,
+                            imageAlt: `Carta ${data.carta}`,
+                            imageWidth: 200,
+                            imageHeight: 'auto',
+                        });
                         let optionsHtml = "";
                         data.opcoes.forEach((option, index) => {
                             optionsHtml += `<button class="option-btn" onclick="checkAnswer('${option}')">${option}</button>`;
