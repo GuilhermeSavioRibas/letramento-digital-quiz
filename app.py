@@ -169,9 +169,10 @@ def get_top5():
 def save_score():
     usuario = session.get('usuario')
     score = session.get('score')
+    empresa = session.get('empresa')
     with open('data.json', 'r') as f:
         data = json.load(f)
-    data.append({'usuario': usuario, 'score': score})
+    data.append({'usuario': usuario, 'score': score, 'quiz': empresa})
     with open('data.json', 'w') as f:
         json.dump(data, f)
 

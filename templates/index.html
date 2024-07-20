@@ -12,7 +12,7 @@
         <h2>Top 5 Pontuadores</h2>
         <ul id="top5">
             {% for item in top5 %}
-                <li>{{ item.usuario }} - {{ item.score }} pontos</li>
+                <li>{{ item.usuario }} - {{ item.score }} pontos - {{ item.quiz }}</li>
             {% endfor %}
         </ul>
     </div>
