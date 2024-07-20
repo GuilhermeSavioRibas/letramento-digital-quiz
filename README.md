@@ -6,6 +6,8 @@ Um projeto de quiz baseado em serviço de suporte, desenvolvido para testar e ap
 
 O Service Desk Quiz é uma aplicação web simples onde os usuários podem responder a perguntas sobre suporte técnico. O sistema faz perguntas aleatórias a partir de um banco de dados em Excel e exibe uma pontuação final com base nas respostas corretas. 
 
+https://service-desk-quiz.onrender.com/
+
 ## Funcionalidades
 
 - **Perguntas Aleatórias:** O quiz puxa perguntas aleatórias de um arquivo Excel.
