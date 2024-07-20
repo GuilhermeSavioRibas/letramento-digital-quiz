@@ -41,23 +41,18 @@ def get_question():
     empresa = session.get('empresa')
     perguntas_empresa = df[df['Empresa'] == empresa]
 
-    # Adicione logs para depuração
-    print(f"Empresa: {empresa}")
-    print(f"Perguntas disponíveis: {len(perguntas_empresa)}")
-
     if perguntas_empresa.empty:
         return jsonify({'error': 'Nenhuma pergunta encontrada para essa empresa.'}), 404
 
-    # Verificar perguntas não respondidas
     answered_questions = session.get('answered_questions', [])
     perguntas_restantes = perguntas_empresa[~perguntas_empresa.index.isin(answered_questions)]
 
     if perguntas_restantes.empty:
         save_score()
-        return jsonify({'error': 'Você ganhou! Todas as perguntas foram respondidas.'}), 404
+        return jsonify({'error': 'Você ganhou! Todas as perguntas foram respondidas.'}), 200
 
     pergunta = perguntas_restantes.sample(n=1).iloc[0]
-    session['answered_questions'].append(int(pergunta.name))  # Certifique-se de que o índice é serializável
+    session['answered_questions'].append(int(pergunta.name))
     opcoes = [
         pergunta['Resposta Correta'],
         pergunta['Resposta Errada 1'],
@@ -66,13 +61,9 @@ def get_question():
     ]
     random.shuffle(opcoes)
     session['correct_answer'] = pergunta['Resposta Correta']
-    session['artigo'] = pergunta['Código do Artigo']
+    session['artigo'] = pergunta['Código do Artigo'] if not pd.isna(pergunta['Código do Artigo']) else None
     session['current_question'] = pergunta['Pergunta']
     session['current_options'] = opcoes
-
-    # Adicione logs para depuração
-    print(f"Pergunta selecionada: {pergunta['Pergunta']}")
-    print(f"Opções: {opcoes}")
 
     return jsonify({
         'pergunta': pergunta['Pergunta'],
@@ -83,8 +74,13 @@ def get_question():
         'pulos': session.get('pulos'),
         'consultas_l2': session.get('consultas_l2'),
         'cartas': session.get('cartas'),
-        'consultas_artigo': session.get('consultas_artigo')
+        'consultas_artigo': session.get('consultas_artigo'),
+        'artigo': session['artigo']
     })
+
+
+
+
 
 @app.route('/check_answer', methods=['POST'])
 def check_answer():
@@ -147,8 +143,12 @@ def use_article():
     if session['consultas_artigo'] > 0:
         session['consultas_artigo'] -= 1
         artigo = session.get('artigo')
-        return jsonify({'success': True, 'artigo': artigo, 'consultas_artigo': session['consultas_artigo']})
+        if artigo:
+            return jsonify({'success': True, 'artigo': artigo, 'consultas_artigo': session['consultas_artigo']})
+        else:
+            return jsonify({'success': False, 'message': 'Nenhum artigo disponível para esta questão.'})
     return jsonify({'success': False})
+
 
 @app.route('/get_article', methods=['GET'])
 def get_article():
