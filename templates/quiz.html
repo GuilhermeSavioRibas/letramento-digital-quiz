@@ -17,7 +17,7 @@
         <button id="l2-button" onclick="useL2()">Consultar Nível 2 (<span id="consultas_l2">1</span> restantes)</button>
         <button id="card-button" onclick="useCard()">Cartas (<span id="cartas">1</span> restantes)</button>
         <button id="article-button" onclick="useArticle()">Consultar Artigo (<span id="consultas_artigo">1</span> restantes)</button>
-        <button id="back-button" onclick="location.href='/'">Voltar</button>
+        <button id="back-button" onclick="location.href='/'">Sair</button>
     </div>
 
     <script>
@@ -97,6 +97,7 @@
                     consultas_l2--;
                     document.getElementById('consultas_l2').innerText = consultas_l2;
                     // Implemente a funcionalidade de consulta nível 2 aqui
+                    alert('Consulte o nível 2.');
                     if (consultas_l2 === 0) {
                         document.getElementById('l2-button').disabled = true;
                     }

@@ -54,7 +54,7 @@ def get_question():
 
     if perguntas_restantes.empty:
         save_score()
-        return jsonify({'error': 'Todas as perguntas foram respondidas.'}), 404
+        return jsonify({'error': 'Você ganhou! Todas as perguntas foram respondidas.'}), 404
 
     pergunta = perguntas_restantes.sample(n=1).iloc[0]
     session['answered_questions'].append(int(pergunta.name))  # Certifique-se de que o índice é serializável
