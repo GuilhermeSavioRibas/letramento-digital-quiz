@@ -23,6 +23,11 @@ O Service Desk Quiz é uma aplicação web simples onde os usuários podem respo
 - **Flask** para o backend da aplicação.
 - **pandas** para manipulação dos dados do Excel.
 
+![image](https://github.com/user-attachments/assets/9b4996cf-6fbe-470d-b069-e7396df4ada0)
+
+![image](https://github.com/user-attachments/assets/f677b739-9812-4921-99c8-99999147cf35)
+
+
 ## Como Rodar o Projeto
 
 1. **Clone o Repositório:**
