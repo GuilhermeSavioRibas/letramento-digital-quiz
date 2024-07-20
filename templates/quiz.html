@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Desk Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz - {{ empresa }}</h1>
+        <h2>Jogador: {{ usuario }}</h2>
+        <h3>Pontos: <span id="score">0</span></h3>
+        <div id="question-container"></div>
+        <button id="skip-button" onclick="useSkip()">Pular Questão (<span id="pulos">3</span> restantes)</button>
+        <button id="l2-button" onclick="useL2()">Consultar Nível 2 (<span id="consultas_l2">1</span> restantes)</button>
+        <button id="card-button" onclick="useCard()">Cartas (<span id="cartas">1</span> restantes)</button>
+        <button id="article-button" onclick="useArticle()">Consultar Artigo (<span id="consultas_artigo">1</span> restantes)</button>
+        <button id="back-button" onclick="location.href='/'">Voltar</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let pulos = 3;
+        let consultas_l2 = 1;
+        let cartas = 1;
+        let consultas_artigo = 1;
+
+        function loadQuestion() {
+            fetch('/get_question', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                const questionContainer = document.getElementById('question-container');
+                questionContainer.innerHTML = `
+                    <h2>${data.pergunta}</h2>
+                    ${data.opcoes.map(opcao => `<button class="option-btn" onclick="checkAnswer('${opcao}')">${opcao}</button>`).join('')}
+                `;
+            });
+        }
+
+        function checkAnswer(resposta) {
+            fetch('/check_answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'resposta': resposta
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.correct) {
+                    score++;
+                    document.getElementById('score').innerText = score;
+                    loadQuestion();
+                } else {
+                    alert(`Resposta errada! Seu score: ${data.score}`);
+                    location.href = '/';
+                }
+            });
+        }
+
+        function useSkip() {
+            fetch('/use_skip', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    pulos--;
+                    document.getElementById('pulos').innerText = pulos;
+                    loadQuestion();
+                    if (pulos === 0) {
+                        document.getElementById('skip-button').disabled = true;
+                    }
+                } else {
+                    alert('Você não tem mais pulos disponíveis.');
+                }
+            });
+        }
+
+        function useL2() {
+            fetch('/use_l2', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    consultas_l2--;
+                    document.getElementById('consultas_l2').innerText = consultas_l2;
+                    // Implemente a funcionalidade de consulta nível 2 aqui
+                    if (consultas_l2 === 0) {
+                        document.getElementById('l2-button').disabled = true;
+                    }
+                } else {
+                    alert('Você não tem mais consultas nível 2 disponíveis.');
+                }
+            });
+        }
+
+        function useCard() {
+            let opcoes = [];
+            $(".option-btn").each(function() {
+                opcoes.push($(this).text());
+            });
+
+            $.ajax({
+                url: "/use_card",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ opcoes: opcoes }),
+                success: function(data) {
+                    if (data.success) {
+                        cartas--;
+                        document.getElementById('cartas').innerText = cartas;
+                        alert(`Você usou a carta: ${data.carta}`);
+                        let optionsHtml = "";
+                        data.opcoes.forEach((option, index) => {
+                            optionsHtml += `<button class="option-btn" onclick="checkAnswer('${option}')">${option}</button>`;
+                        });
+                        $("#question-container").html(`
+                            <h2>${data.pergunta}</h2>
+                            ${optionsHtml}
+                        `);
+                        if (cartas === 0) {
+                            document.getElementById('card-button').disabled = true;
+                        }
+                    } else {
+                        alert('Você não tem mais cartas disponíveis.');
+                    }
+                }
+            });
+        }
+
+        function useArticle() {
+            fetch('/use_article', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    consultas_artigo--;
+                    document.getElementById('consultas_artigo').innerText = consultas_artigo;
+                    alert(`Artigo: ${data.artigo}`);
+                    if (consultas_artigo === 0) {
+                        document.getElementById('article-button').disabled = true;
+                    }
+                } else {
+                    alert('Você não tem mais consultas de artigo disponíveis.');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadQuestion);
+    </script>
+</body>
+</html>

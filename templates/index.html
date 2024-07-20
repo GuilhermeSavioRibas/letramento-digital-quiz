@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Desk Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Service Desk Quiz</h1>
+    <div class="container">
+        <h2>Top 5 Pontuadores</h2>
+        <ul id="top5">
+            {% for item in top5 %}
+                <li>{{ item.usuario }} - {{ item.score }} pontos</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="container">
+        
+        <form id="startForm">
+            <label for="empresa">Selecione a empresa:</label>
+            <select id="empresa" name="empresa">
+                {% for empresa in empresas %}
+                    <option value="{{ empresa }}">{{ empresa }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="usuario" style="margin-top: 20px;">Digite seu nome:</label>
+            <input type="text" id="usuario" name="usuario" required>
+            <br>
+            <button type="submit">Iniciar Quiz</button>
+        </form>
+    </div>
+
+    
+
+    <script>
+        document.getElementById('startForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const empresa = document.getElementById('empresa').value;
+            const usuario = document.getElementById('usuario').value;
+
+            fetch('/start_quiz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'empresa': empresa,
+                    'usuario': usuario
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.open();
+                document.write(data);
+                document.close();
+            });
+        });
+    </script>
+</body>
+</html>
