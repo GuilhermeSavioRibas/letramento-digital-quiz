@@ -19,7 +19,6 @@
         <button id="card-button" onclick="useCard()">Cartas (<span id="cartas">1</span> restantes)</button>
         <button id="article-button" onclick="useArticle()">Consultar Artigo (<span id="consultas_artigo">1</span> restantes)</button>
         <button id="back-button" onclick="confirmExit()">Sair</button>
-
     </div>
 
     <script>
@@ -28,7 +27,6 @@
         let consultas_l2 = 1;
         let cartas = 1;
         let consultas_artigo = 1;
-        
         
         function disableAllButtons() {
             document.querySelectorAll('button').forEach(button => {
@@ -43,27 +41,27 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    alert(data.error);
+                    Swal.fire({
+                        title: 'Erro',
+                        text: data.error,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                     if (data.error.includes('Você ganhou')) {
-                        // Desativa todos os botões de interação
                         disableAllButtons();
-
-                        // Redireciona após um atraso para garantir que o alerta seja visível
                         setTimeout(() => {
                             window.location.href = '/';
-                        }, 3000); // Ajuste o tempo conforme necessário
+                        }, 3000); 
                     }
                     return;
                 }
 
-                // Atualiza a pergunta e as opções
                 const questionContainer = document.getElementById('question-container');
                 questionContainer.innerHTML = `
                     <h2>${data.pergunta}</h2>
                     ${data.opcoes.map(opcao => `<button class="option-btn" onclick="checkAnswer('${opcao}')">${opcao}</button>`).join('')}
                 `;
 
-                // Atualiza o botão de artigo
                 if (data.artigo === null) {
                     document.getElementById('article-button').disabled = false;
                     document.getElementById('consultas_artigo').innerText = '0';
@@ -72,7 +70,6 @@
                     document.getElementById('consultas_artigo').innerText = consultas_artigo;
                 }
 
-                // Salvar o artigo no sessionStorage
                 if (data.artigo) {
                     sessionStorage.setItem('artigo', data.artigo);
                 } else {
@@ -98,8 +95,14 @@
                     document.getElementById('score').innerText = score;
                     loadQuestion();
                 } else {
-                    alert(`Resposta errada! Seu score: ${data.score}`);
-                    location.href = '/';
+                    Swal.fire({
+                        title: 'Resposta errada!',
+                        text: `Seu score: ${data.score}`,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.href = '/';
+                    });
                 }
             });
         }
@@ -118,7 +121,12 @@
                         document.getElementById('skip-button').disabled = true;
                     }
                 } else {
-                    alert('Você não tem mais pulos disponíveis.');
+                    Swal.fire({
+                        title: 'Atenção',
+                        text: 'Você não tem mais pulos disponíveis.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
                 }
             });
         }
@@ -132,13 +140,22 @@
                 if (data.success) {
                     consultas_l2--;
                     document.getElementById('consultas_l2').innerText = consultas_l2;
-                    // Implemente a funcionalidade de consulta nível 2 aqui
-                    alert('Consulte o nível 2.');
+                    Swal.fire({
+                        title: 'Consulta ao L2',
+                        text: 'Consulta ao L2 realizada com sucesso!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
                     if (consultas_l2 === 0) {
                         document.getElementById('l2-button').disabled = true;
                     }
                 } else {
-                    alert('Você não tem mais consultas nível 2 disponíveis.');
+                    Swal.fire({
+                        title: 'Atenção',
+                        text: 'Você não tem mais consultas nível 2 disponíveis.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
                 }
             });
         }
@@ -177,14 +194,18 @@
                             document.getElementById('card-button').disabled = true;
                         }
                     } else {
-                        alert('Você não tem mais cartas disponíveis.');
+                        Swal.fire({
+                            title: 'Atenção',
+                            text: 'Você não tem mais cartas disponíveis.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
                     }
                 }
             });
         }
 
         function useArticle() {
-            // Verificar se há um artigo disponível na pergunta atual
             if (sessionStorage.getItem('artigo')) {
                 fetch('/use_article', {
                     method: 'POST'
@@ -194,16 +215,31 @@
                     if (data.success) {
                         consultas_artigo--;
                         document.getElementById('consultas_artigo').innerText = consultas_artigo;
-                        alert(`Artigo: ${data.artigo}`);
+                        Swal.fire({
+                            title: 'Consulta ao Artigo',
+                            text: `Artigo: ${data.artigo}`,
+                            icon: 'info',
+                            confirmButtonText: 'OK'
+                        });
                         if (consultas_artigo === 0) {
                             document.getElementById('article-button').disabled = true;
                         }
                     } else {
-                        alert('Nenhum artigo disponível.');
+                        Swal.fire({
+                            title: 'Atenção',
+                            text: 'Nenhum artigo disponível.',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
                     }
                 });
             } else {
-                alert('Nenhum artigo disponível para esta questão.');
+                Swal.fire({
+                    title: 'Atenção',
+                    text: 'Nenhum artigo disponível para esta questão.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
             }
         }
 
@@ -217,12 +253,10 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redireciona para a página inicial
                     window.location.href = '/';
                 }
             });
         }
-
 
         document.addEventListener('DOMContentLoaded', loadQuestion);
     </script>
