@@ -25,9 +25,9 @@ https://service-desk-quiz.onrender.com/
 - **Flask** para o backend da aplicação.
 - **pandas** para manipulação dos dados do Excel.
 
-![image](https://github.com/user-attachments/assets/4f5a0d7c-6d6a-43f1-8b49-c764ac55f2fc)
+![image](https://github.com/user-attachments/assets/cfd3c76e-14bd-4bcc-93ee-9b9f4f1bf070)
 
-![image](https://github.com/user-attachments/assets/320529a9-1d2c-4749-a34e-2238e33c153d)
+![image](https://github.com/user-attachments/assets/441792ed-73f2-47c0-89a5-4209b012c841)
 
 ## Como Rodar o Projeto
 
