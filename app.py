@@ -180,5 +180,26 @@ def save_score():
 def reset():
     return redirect('/')
 
+@app.route('/get_top5', methods=['GET'])
+def get_top5_route():
+    empresa = request.args.get('empresa')
+    if not empresa:
+        return jsonify([])
+
+    top5 = get_top5(empresa)
+    return jsonify(top5)
+
+
+def get_top5(empresa=None):
+    with open('data.json', 'r') as f:
+        data = json.load(f)
+
+    if empresa:
+        data = [item for item in data if item['quiz'] == empresa]
+
+    sorted_data = sorted(data, key=lambda x: x['score'], reverse=True)[:5]
+    return sorted_data
+
+
 if __name__ == '__main__':
     app.run(debug=True)

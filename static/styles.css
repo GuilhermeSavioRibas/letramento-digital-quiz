@@ -73,3 +73,40 @@ button:hover {
 .option-btn:hover {
     background-color: #C400E1;
 }
+
+select {
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #007173;
+}
+
+#view-top5 {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007173;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#view-top5:hover {
+    background-color: #00E2B8;
+}
+
+#top5-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+#top5-list li {
+    text-align: center;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #E0E0E0;
+    border-radius: 5px;
+}
