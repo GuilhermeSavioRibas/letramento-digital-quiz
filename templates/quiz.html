@@ -34,6 +34,7 @@
             });
         }
 
+
         function loadQuestion() {
             fetch('/get_question', {
                 method: 'POST'
@@ -47,12 +48,21 @@
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });
-                    if (data.error.includes('Você ganhou')) {
+                    return;
+                }
+
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Parabéns!',
+                        text: data.success,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
                         disableAllButtons();
                         setTimeout(() => {
                             window.location.href = '/';
-                        }, 3000); 
-                    }
+                        }, 3000);
+                    });
                     return;
                 }
 
