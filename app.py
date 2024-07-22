@@ -49,7 +49,7 @@ def get_question():
 
     if perguntas_restantes.empty:
         save_score()
-        return jsonify({'error': 'Você ganhou! Todas as perguntas foram respondidas.'}), 200
+        return jsonify({'success': 'Você ganhou! Todas as perguntas foram respondidas.'}), 200
 
     pergunta = perguntas_restantes.sample(n=1).iloc[0]
     session['answered_questions'].append(int(pergunta.name))
