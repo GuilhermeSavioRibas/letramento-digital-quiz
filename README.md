@@ -1,4 +1,4 @@
-# Letramento Digital Quiz
+# Letramento Digital - Quiz
 
 Um projeto de quiz interativo voltado para ensinar conceitos de letramento digital, como segurança online, privacidade, e cidadania digital. O quiz foi desenvolvido usando HTML, CSS, JavaScript e Python com Flask, e busca testar e aprimorar o conhecimento dos usuários sobre temas essenciais do mundo digital.
 
