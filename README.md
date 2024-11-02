@@ -1,40 +1,44 @@
-# Letramento Digital Quiz
+# Service Desk Quiz
 
-Um projeto de quiz interativo voltado para ensinar conceitos de letramento digital, como segurança online, privacidade, e cidadania digital. O quiz foi desenvolvido usando HTML, CSS, JavaScript e Python com Flask, e busca testar e aprimorar o conhecimento dos usuários sobre temas essenciais do mundo digital.
+Um projeto de quiz baseado em serviço de suporte, desenvolvido para testar e aprimorar conhecimentos sobre o serviço de atendimento. O quiz é uma aplicação web que utiliza HTML, CSS, JavaScript e Python com Flask para criar uma experiência interativa e educativa.
 
 ## Descrição
 
-O **Letramento Digital Quiz** é uma aplicação web onde os usuários podem responder perguntas sobre diversos temas ligados à tecnologia e segurança digital. As perguntas são retiradas de uma planilha Excel, e o sistema apresenta um placar final baseado nas respostas corretas.
+O Service Desk Quiz é uma aplicação web simples onde os usuários podem responder a perguntas sobre suporte técnico. O sistema faz perguntas aleatórias a partir de um banco de dados em Excel e exibe uma pontuação final com base nas respostas corretas. 
 
-https://letramento-digital-quiz.onrender.com/
+https://service-desk-quiz.onrender.com/
 
 ## Funcionalidades
 
-- **Perguntas Aleatórias:** O quiz seleciona perguntas aleatórias de um arquivo Excel que cobre temas variados de letramento digital.
-- **Pontuação:** O usuário ganha 1 ponto por cada resposta correta.
-- **Resolução de Respostas Incorretas:** Se o usuário errar uma resposta, o quiz exibe a pontuação final e termina o jogo.
-- **Registro de Pontuação:** A pontuação do usuário é salva para possível análise ou revisão futura.
-- **Material de Consulta:** Cada pergunta tem um link para material educativo, como vídeos ou textos, para ajudar o usuário a aprender sobre o tema abordado.
+- **Perguntas Aleatórias:** O quiz puxa perguntas aleatórias de um arquivo Excel.
+- **Pontuação:** O usuário ganha 1 ponto por resposta correta.
+- **Resolução de Respostas Incorretas:** Se o usuário errar uma resposta, o jogo termina e a pontuação é exibida.
+- **Registro de Pontuação:** As pontuações são salvas em um relatório para análise futura.
+- **Evitar Perguntas Repetidas:** As perguntas não se repetem durante o mesmo jogo.
 
 ## Tecnologias Utilizadas
 
-- **HTML** para a estrutura da página.
-- **CSS** para o design e layout.
-- **JavaScript** para a lógica do quiz e interação com o usuário.
-- **Excel** como banco de dados de perguntas e respostas.
+- **HTML** para estruturação da página.
+- **CSS** para estilização.
+- **JavaScript** para lógica do quiz e manipulação de dados.
+- **Excel** como fonte de dados para as perguntas.
 - **Flask** para o backend da aplicação.
-- **pandas** para manipulação dos dados da planilha Excel.
+- **pandas** para manipulação dos dados do Excel.
+
+![image](https://github.com/user-attachments/assets/cfd3c76e-14bd-4bcc-93ee-9b9f4f1bf070)
+
+![image](https://github.com/user-attachments/assets/441792ed-73f2-47c0-89a5-4209b012c841)
 
 ## Como Rodar o Projeto
 
 1. **Clone o Repositório:**
    ```bash
-   git clone https://github.com/GuilhermeSavioRibas/letramento-digital-quiz.git
+   git clone https://github.com/GuilhermeSavioRibas/Service-Desk-Quiz.git
 
 2. **Navegue até o Diretório do Projeto:**
 
     ```bash
-    cd letramento-digital-quiz
+    cd Service-Desk-Quiz
 
 3. **Configure o Arquivo de Perguntas:**
 
