@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template, session, redirect
+from datetime import datetime
 import pandas as pd
 import random
 import json
@@ -18,15 +19,15 @@ if not os.path.exists('data.json'):
 
 @app.route('/')
 def index():
-    empresas = df['Empresa'].unique()
+    temas = df['Tema'].unique()
     top5 = get_top5()
-    return render_template('index.html', empresas=empresas, top5=top5)
+    return render_template('index.html', temas=temas, top5=top5)
 
 @app.route('/start_quiz', methods=['POST'])
 def start_quiz():
-    empresa = request.form['empresa']
+    tema = request.form['tema']
     usuario = request.form['usuario']
-    session['empresa'] = empresa
+    session['tema'] = tema
     session['usuario'] = usuario
     session['score'] = 0
     session['pulos'] = 3
@@ -34,18 +35,18 @@ def start_quiz():
     session['cartas'] = 1
     session['consultas_artigo'] = 1
     session['answered_questions'] = []
-    return render_template('quiz.html', empresa=empresa, usuario=usuario)
+    return render_template('quiz.html', tema=tema, usuario=usuario)
 
 @app.route('/get_question', methods=['POST'])
 def get_question():
-    empresa = session.get('empresa')
-    perguntas_empresa = df[df['Empresa'] == empresa]
+    tema = session.get('tema')
+    perguntas_tema = df[df['Tema'] == tema]
 
-    if perguntas_empresa.empty:
-        return jsonify({'error': 'Nenhuma pergunta encontrada para essa empresa.'}), 404
+    if perguntas_tema.empty:
+        return jsonify({'error': 'Nenhuma pergunta encontrada para esse tema.'}), 404
 
     answered_questions = session.get('answered_questions', [])
-    perguntas_restantes = perguntas_empresa[~perguntas_empresa.index.isin(answered_questions)]
+    perguntas_restantes = perguntas_tema[~perguntas_tema.index.isin(answered_questions)]
 
     if perguntas_restantes.empty:
         save_score()
@@ -61,37 +62,42 @@ def get_question():
     ]
     random.shuffle(opcoes)
     session['correct_answer'] = pergunta['Resposta Correta']
-    session['artigo'] = pergunta['Código do Artigo'] if not pd.isna(pergunta['Código do Artigo']) else None
+    session['artigo'] = pergunta['Material de consulta'] if not pd.isna(pergunta['Material de consulta']) else None
     session['current_question'] = pergunta['Pergunta']
     session['current_options'] = opcoes
+
+    # Total de perguntas
+    total_perguntas = len(perguntas_tema)
+    # Número da pergunta atual
+    pergunta_numero = len(session['answered_questions'])
 
     return jsonify({
         'pergunta': pergunta['Pergunta'],
         'opcoes': opcoes,
-        'empresa': empresa,
+        'tema': tema,
         'usuario': session.get('usuario'),
         'score': session.get('score'),
         'pulos': session.get('pulos'),
         'consultas_l2': session.get('consultas_l2'),
         'cartas': session.get('cartas'),
         'consultas_artigo': session.get('consultas_artigo'),
-        'artigo': session['artigo']
+        'artigo': session['artigo'],
+        'total_perguntas': total_perguntas,
+        'pergunta_numero': pergunta_numero
     })
-
-
-
-
 
 @app.route('/check_answer', methods=['POST'])
 def check_answer():
     resposta = request.form['resposta']
     correct_answer = session.get('correct_answer')
+    current_question = session.get('current_question')
     if resposta == correct_answer:
         session['score'] += 1
         return jsonify({'correct': True})
     else:
         save_score()
-        return jsonify({'correct': False, 'score': session.get('score')})
+        return jsonify({'correct': False, 'score': session.get('score'), 'question': current_question, 'correct_answer': correct_answer})
+
 
 @app.route('/use_skip', methods=['POST'])
 def use_skip():
@@ -169,10 +175,11 @@ def get_top5():
 def save_score():
     usuario = session.get('usuario')
     score = session.get('score')
-    empresa = session.get('empresa')
+    tema = session.get('tema')
+    quiz_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open('data.json', 'r') as f:
         data = json.load(f)
-    data.append({'usuario': usuario, 'score': score, 'quiz': empresa})
+    data.append({'usuario': usuario, 'score': score, 'quiz': tema, 'date': quiz_date})
     with open('data.json', 'w') as f:
         json.dump(data, f)
 
@@ -182,20 +189,20 @@ def reset():
 
 @app.route('/get_top5', methods=['GET'])
 def get_top5_route():
-    empresa = request.args.get('empresa')
-    if not empresa:
+    tema = request.args.get('tema')
+    if not tema:
         return jsonify([])
 
-    top5 = get_top5(empresa)
+    top5 = get_top5(tema)
     return jsonify(top5)
 
 
-def get_top5(empresa=None):
+def get_top5(tema=None):
     with open('data.json', 'r') as f:
         data = json.load(f)
 
-    if empresa:
-        data = [item for item in data if item['quiz'] == empresa]
+    if tema:
+        data = [item for item in data if item['quiz'] == tema]
 
     sorted_data = sorted(data, key=lambda x: x['score'], reverse=True)[:5]
     return sorted_data

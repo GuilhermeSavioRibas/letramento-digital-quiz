@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Service Desk Quiz</h1>
+    <h1>Letramento Digital - Quiz</h1>
     <div class="container">
         <h2>Top 5</h2>
         <ul id="top5-list"></ul>
@@ -15,10 +15,10 @@
 
     <div class="container">
         <form id="startForm">
-            <label for="empresa">Selecione o Quiz:</label>
-            <select id="empresa" name="empresa">
-                {% for empresa in empresas %}
-                    <option value="{{ empresa }}">{{ empresa }}</option>
+            <label for="tema">Selecione o tema:</label>
+            <select id="tema" name="tema">
+                {% for tema in temas %}
+                    <option value="{{ tema }}">{{ tema }}</option>
                 {% endfor %}
             </select>
             <br>
@@ -32,7 +32,7 @@
     <script>
         document.getElementById('startForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const empresa = document.getElementById('empresa').value;
+            const tema = document.getElementById('tema').value;
             const usuario = document.getElementById('usuario').value;
 
             fetch('/start_quiz', {
@@ -41,7 +41,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
-                    'empresa': empresa,
+                    'tema': tema,
                     'usuario': usuario
                 })
             })
@@ -54,9 +54,9 @@
         });
 
         function updateTop5() {
-            const empresa = document.getElementById('empresa').value;
+            const tema = document.getElementById('tema').value;
 
-            fetch(`/get_top5?empresa=${empresa}`)
+            fetch(`/get_top5?tema=${tema}`)
                 .then(response => response.json())
                 .then(data => {
                     const top5List = document.getElementById('top5-list');
@@ -69,9 +69,9 @@
                 });
         }
 
-        document.getElementById('empresa').addEventListener('change', updateTop5);
-
-        // Carrega o Top 5 ao iniciar a página
+        document.getElementById('tema').addEventListener('change', updateTop5);
+        
+        
         window.onload = updateTop5;
     </script>
 </body>
