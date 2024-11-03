@@ -50,12 +50,3 @@ https://letramento-digital-quiz.onrender.com/
 
 6. **Abra o servidor criado em um navegador web**
     Exemplo: http://127.0.0.1:5000
-
-
-## Contato
-
-Para mais informações, entre em contato com:
-
-* Nome: Guilherme Savio Ribas
-* E-mail: guilherme.savio@gmail.com
-* GitHub: GuilhermeSavioRibas
